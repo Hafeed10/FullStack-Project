@@ -1,185 +1,168 @@
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
-function Student()
-{
 
+function Student() {
   const [id, setId] = useState('');
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [fee, setFee] = useState("");
-  const [students, setUsers] = useState([]);
+  const [students, setStudents] = useState([]);
 
-
-useEffect(() => {
-  (async () => await Load())();
+  useEffect(() => {
+    (async () => await Load())();
   }, []);
 
-
-  async function  Load()
-  {
-     const result = await axios.get(
-         "http://127.0.0.1:8000/student");
-         setUsers(result.data);
-         console.log(result.data);
+  async function Load() {
+    const result = await axios.get("http://127.0.0.1:8000/student");
+    setStudents(result.data);
+    console.log(result.data);
   }
 
-
- async function save(event)
-    {
-        event.preventDefault();
-    try
-        {
-         await axios.post("http://127.0.0.1:8000/student",
-        {
-
-          name: name,
-          address: address,
-          fee: fee
-
-        });
-          alert("Student Registation Successfully");
-          setId("");
-          setName("");
-          setAddress("");
-          setFee("");
-          Load();
-
-
-
-        }
-    catch(err)
-        {
-          alert("Student Registation Failed");
-        }
-   }
-
-
-
-   async function editStudent(students)
-   {
-    setName(students.name);
-    setAddress(students.address);
-    setFee(students.fee);
-    setId(students.id);
-
-   }
-   async function DeleteStudent(id)
-   {
-
-        await axios.delete("http://127.0.0.1:8000/student/" + id);
-        alert("Student deleted Successfully");
-        setId("");
-        setName("");
-        setAddress("");
-        setFee("");
-        Load();
-
-
-   }
-   async function update(event)
-   {
+  async function save(event) {
     event.preventDefault();
-   try
-       {
-
-        await axios.put("http://127.0.0.1:8000/student/"+ students.find(u => u.id === id).id || id,
-       {
-         id: id,
-         name: name,
-         address: address,
-         fee: fee
-
-       });
-         alert("Student Updateddddd");
-         setId("");
-         setName("");
-         setAddress("");
-         setFee("");
-         Load();
-
-       }
-   catch(err)
-       {
-         alert(" Student updateddd Failed");
-       }
+    try {
+      await axios.post("http://127.0.0.1:8000/student", {
+        name: name,
+        address: address,
+        fee: fee
+      });
+      alert("Student Registration Successfully");
+      setId("");
+      setName("");
+      setAddress("");
+      setFee("");
+      Load();
+    } catch (err) {
+      alert("Student Registration Failed");
+    }
   }
+
+  async function editStudent(student) {
+    setName(student.name);
+    setAddress(student.address);
+    setFee(student.fee);
+    setId(student.id);
+  }
+
+  async function DeleteStudent(id) {
+    await axios.delete("http://127.0.0.1:8000/student/" + id);
+    alert("Student deleted Successfully");
+    setId("");
+    setName("");
+    setAddress("");
+    setFee("");
+    Load();
+  }
+
+  async function update(event) {
+    event.preventDefault();
+    try {
+      await axios.put("http://127.0.0.1:8000/student/" + id, {
+        id: id,
+        name: name,
+        address: address,
+        fee: fee
+      });
+      alert("Student Updated Successfully");
+      setId("");
+      setName("");
+      setAddress("");
+      setFee("");
+      Load();
+    } catch (err) {
+      alert("Student Update Failed");
+    }
+  }
+
   return (
-    <div className="flex justify-center">
-       <h1>Student Details</h1>
-       <div class="container mt-4" >
-          <form>
-              <div class="form-group">
-
-               <label>Student Name</label>
-                <input  type="text" class="form-control" id="name"
-                value={name}
-                onChange={(event) =>
-                  {
-                    setName(event.target.value);
-                  }}
-                />
-              </div>
-
-              <div class="form-group">
-                <label>Address</label>
-                <input  type="text" class="form-control" id="address"
-                 value={address}
-                  onChange={(event) =>
-                    {
-                     setAddress(event.target.value);
-                    }}
-                />
-              </div>
-              <div class="form-group">
-                <label>Fee</label>
-                <input type="text" class="form-control" id="fee"
-                  value={fee}
-                onChange={(event) =>
-                  {
-                    setFee(event.target.value);
-                  }}
-                />
-              </div>
-                 <div>
-              <button   class="btn btn-primary mt-4"  onClick={save}>Register</button>
-              <button   class="btn btn-warning mt-4"  onClick={update}>Update</button>
-              </div>
-
-
-            </form>
+    <div className="flex flex-col items-center">
+      <h1 className="text-center font-mono text-5xl py-10">Student Details</h1>
+      <div className="flex justify-center text-start w-1/2 border-gray-700">
+        <form className="w-full">
+          <div className="form-group mb-4">
+            <label className="block">Student Name</label>
+            <input
+              type="text"
+              className="form-control w-full p-2 border border-gray-300 rounded"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
           </div>
 
+          <div className="form-group mb-4">
+            <label className="block">Address</label>
+            <input
+              type="text"
+              className="form-control w-full p-2 border border-gray-300 rounded"
+              value={address}
+              onChange={(event) => setAddress(event.target.value)}
+            />
+          </div>
 
-<table class="table table-dark" align="center">
-  <thead>
-    <tr>
-      <th scope="col">Student Id</th>
-      <th scope="col">Student Name</th>
-      <th scope="col">Address</th>
-      <th scope="col">Fee</th>
+          <div className="form-group mb-4">
+            <label className="block">Fee</label>
+            <input
+              type="text"
+              className="form-control w-full p-2 border border-gray-300 rounded"
+              value={fee}
+              onChange={(event) => setFee(event.target.value)}
+            />
+          </div>
 
-      <th scope="col">Option</th>
-    </tr>
-  </thead>
-       {students.map(function fn(student)
-       {
-            return(
-            <tbody>
-                <tr>
-                <th scope="row">{student.id} </th>
-                <td>{student.name}</td>
-                <td>{student.address}</td>
-                <td>{student.fee}</td>
-                <td>
-                    <button type="button" class="btn btn-warning"  onClick={() => editStudent(student)} >Edit</button>
-                    <button type="button" class="btn btn-danger" onClick={() => DeleteStudent(student.id)}>Delete</button>
-                </td>
-                </tr>
-            </tbody>
-            );
-            })}
-            </table>
-       </div>
-            );
-        }
+          <div className="flex gap-5 py-10">
+            <button
+              className="bg-orange-600 p-2 rounded-lg text-white"
+              onClick={save}
+            >
+              Register
+            </button>
+            <button
+              className="bg-blue-600 p-2 rounded-lg text-white"
+              onClick={update}
+            >
+              Update
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <table className="table-auto border-collapse w-3/4 mt-10">
+        <thead>
+          <tr className="bg-gray-800 text-white">
+            <th className="border px-4 py-2">Student Id</th>
+            <th className="border px-4 py-2">Student Name</th>
+            <th className="border px-4 py-2">Address</th>
+            <th className="border px-4 py-2">Fee</th>
+            <th className="border px-4 py-2">Option</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map((student) => (
+            <tr key={student.id}>
+              <td className="border px-4 py-2">{student.id}</td>
+              <td className="border px-4 py-2">{student.name}</td>
+              <td className="border px-4 py-2">{student.address}</td>
+              <td className="border px-4 py-2">{student.fee}</td>
+              <td className="border px-4 py-2">
+                <button
+                  className="bg-yellow-500 text-white p-2 rounded mr-2"
+                  onClick={() => editStudent(student)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="bg-red-500 text-white p-2 rounded"
+                  onClick={() => DeleteStudent(student.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default Student;
